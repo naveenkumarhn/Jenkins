@@ -11,8 +11,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        checkout([$class: ‘GitSCM’, branches: [[name: ‘*/master’]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: ‘github_password’, url: ‘https://github.com/naveenkumarhn/Jenkins.git'[[[)
-        sh “ls -lart ./“
+        Git 'https://github.com/naveenkumarhn/Jenkins.git'
       }
     }
 
