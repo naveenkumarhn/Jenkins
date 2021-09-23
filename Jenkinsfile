@@ -27,7 +27,7 @@ podTemplate(yaml: '''
             - key: .dockerconfigjson
               path: config.json
 ''') {
-  node(kubepod) {
+  node(POD_LABEL) {
     stage('Get a Maven project') {
       git url: 'https://github.com/naveenkumarhn/Jenkins.git', branch: 'master'
       container('maven') {
