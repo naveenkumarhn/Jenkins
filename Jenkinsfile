@@ -1,6 +1,6 @@
 pipeline {
-  agent any { 
-    kubernetes {
+  agent { 
+    kubepod {
       yaml """
 kind: Pod
 spec:
