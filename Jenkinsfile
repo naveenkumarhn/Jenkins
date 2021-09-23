@@ -1,47 +1,42 @@
-podTemplate(yaml: '''
-    apiVersion: v1
-    kind: Pod
-    spec:
-      containers:
-      - name: kaniko
-        image: gcr.io/kaniko-project/executor:debug
-        command:
-        - sleep
-        args:
-        - 9999999
-        volumeMounts:
-        - name: kaniko-secret
-          mountPath: /kaniko/.docker
-      restartPolicy: Never
-      volumes:
-      - name: kaniko-secret
-        secret:
-            secretName: dockercred
-            items:
+pipeline {
+  agent {
+    kubernetes {
+      yaml """
+kind: Pod
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 9999999
+    volumeMounts:
+      - name: jenkins-docker-cfg
+        mountPath: /kaniko/.docker
+  volumes:
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: docker-credentials 
+          items:
             - key: .dockerconfigjson
               path: config.json
-''') {
-  node(kubepod) {
-    stage('Get a Maven project') {
-      git url: 'https://github.com/naveenkumarhn/Jenkins.git', branch: 'master'
-      container('maven') {
-        stage('Build a Maven project') {
-          sh '''
-          echo pwd
+"""
+    }
+  }
+  stages {
+    stage('Build with Kaniko') {
+      steps {
+        container(name: 'kaniko', shell: '/busybox/sh') {
+          sh '''#!/busybox/sh
+            echo "FROM jenkins/inbound-agent:latest" > Dockerfile
+            /kaniko/executor --context `pwd` --destination naveenkumar003/hello-kaniko:latest 
           '''
         }
       }
     }
-
-    stage('Build Java Image') {
-      container('kaniko') {
-        stage('Build a Go project') {
-          sh '''
-            /kaniko/executor --context `pwd` --destination naveenkumar003/hello-kaniko:1.0
-          '''
-        }
-      }
-    }
-
   }
 }
