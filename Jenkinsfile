@@ -1,46 +1,31 @@
 pipeline {
-
-  environment {
-    registry = "naveenkumar003/my-webapp"
-    dockerImage = ""
-  }
-
   agent { label 'kubepod' }
-
-  stages {
-
-    stage('Checkout Source') {
-      steps {
-        git 'https://github.com/naveenkumarhn/Jenkins.git'
-      }
-    }
-
-    stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
-        }
-      }
-    }
-
-    stage('Push Image') {
-      steps{
-        script {
-          docker.withRegistry( "" ) {
-            dockerImage.push()
-          }
-        }
-      }
-    }
-
-    stage('Deploy App') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "myweb.yaml", kubeconfigId: "mykubeconfig")
-        }
-      }
-    }
-
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
   }
-
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('navennkumar003')
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t naveenkumar003/dp-alpine:latest .'
+      }
+    }
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      }
+    }
+    stage('Push') {
+      steps {
+        sh 'docker push naveenkumar003/dp-alpine:latest'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'docker logout'
+    }
+  }
 }
