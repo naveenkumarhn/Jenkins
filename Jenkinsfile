@@ -12,7 +12,7 @@ pipeline {
             }
             steps {
               sh "/kaniko/executor \
-                    --context=git://github.com/naveenkumarhn/Jenkins.git#refs/heads/master \
+                    --context=https://github.com/naveenkumarhn/Jenkins.git \
                     --dockerfile=Dockerfile \
                     --verbosity=debug \
                     --cache=true \
