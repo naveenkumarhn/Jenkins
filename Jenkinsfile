@@ -1,5 +1,5 @@
 pipeline {
-  agent {
+  agent { label 'kubepod' }
     kubernetes {
       yaml """
 kind: Pod
