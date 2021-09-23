@@ -1,31 +1,54 @@
-pipeline {
-  agent { label 'kubepod' }
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
-  }
-  environment {
-    DOCKERHUB_CREDENTIALS = credentials('naveenkumar003')
-  }
-  stages {
-    stage('Build') {
-      steps {
-        sh 'docker build -t naveenkumar003/dp-alpine:latest .'
+podTemplate(yaml: '''
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+      - name: maven
+        image: maven:3.8.1-jdk-8
+        command:
+        - sleep
+        args:
+        - 99d
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:debug
+        command:
+        - sleep
+        args:
+        - 9999999
+        volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
+      restartPolicy: Never
+      volumes:
+      - name: kaniko-secret
+        secret:
+            secretName: dockercred
+            items:
+            - key: .dockerconfigjson
+              path: config.json
+''') {
+  node(kubepod) {
+    stage('Get a Maven project') {
+      git url: 'https://github.com/naveenkumarhn/Jenkins.git', branch: 'master'
+      container('maven') {
+        stage('Build a Maven project') {
+          sh '''
+          echo pwd
+          '''
+        }
       }
     }
-    stage('Login') {
-      steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+
+    stage('Build Java Image') {
+      container('kaniko') {
+        stage('Build a Go project') {
+          sh '''
+            /kaniko/executor --context `pwd` --destination naveenkumar003/hello-kaniko:1.0
+          '''
+        }
       }
     }
-    stage('Push') {
-      steps {
-        sh 'docker push naveenkumar003/dp-alpine:latest'
-      }
-    }
-  }
-  post {
-    always {
-      sh 'docker logout'
-    }
+
   }
 }
+
