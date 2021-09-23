@@ -1,10 +1,10 @@
 pipeline {
-  agent { label 'kubepod' }
+  agent any
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   environment {
-    DOCKERHUB_CREDENTIALS = credentials('navennkumar003')
+    DOCKERHUB_CREDENTIALS = credentials('naveenkumar003')
   }
   stages {
     stage('Build') {
