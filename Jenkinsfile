@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    registry = "naveenkumar003/my-webapp:v1"
+    registry = "naveenkumar003/my-webapp"
     dockerImage = ""
   }
 
