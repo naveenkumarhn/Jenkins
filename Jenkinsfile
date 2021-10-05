@@ -46,7 +46,7 @@ spec:
      stage("Deployment") {
           steps {
              sshagent(credentials: ["github-ssh"]) {
-                git branch: 'main',credentialsId: 'github-ssh', url: 'git@github.com:naveenkumarhn/TEAM-A.git'
+                git branch: 'main',credentialsId: 'github-ssh', url: 'git@github.com:naveenkumarhn/Jenkins.git'
                 
                sh '''
                   git config --global user.email "nkumar1805@yahoo.in"
