@@ -36,7 +36,7 @@ spec:
                      sh '''
                      /kaniko/executor --dockerfile `pwd`/Dockerfile \
                                       --context `pwd` \
-                                      --destination=10.0.30.154:5000/myweb:${BUILD_NUMBER}
+                                      --destination=naveenkumar003/myweb:${BUILD_NUMBER}
                         '''
                   }
                }
@@ -45,7 +45,7 @@ spec:
       }
      stage('Run Vulnerability Scan') {
       steps {
-        sh 'grype 10.0.30.154:5000/myweb:${BUILD_NUMBER} --scope AllLayers'
+        sh 'grype naveenkumar003/myweb:${BUILD_NUMBER} --scope AllLayers'
        }
      }
      stage("Deployment") {
