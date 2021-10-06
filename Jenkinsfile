@@ -43,14 +43,12 @@ spec:
                
         }
       }
-     stages {
       stage('Analyze with Anchore plugin') {
          steps {
             writeFile file: 'anchore_images', text: 'docker.io/naveenkumar003/myweb:${BUILD_NUMBER}'
             anchore name: 'anchore_images'
          }
       }
-   }
      stage("Deployment") {
           steps {
              sshagent(credentials: ["github-ssh"]) {
