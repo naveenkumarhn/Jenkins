@@ -1,2 +1,13 @@
-FROM httpd:2.4
-COPY ./index.html /usr/local/apache2/htdocs/
+FROM alpine
+
+RUN apk update
+
+RUN DEBIAN_FRONTEND="noninteractive" apk add tzdata
+
+RUN apk update && apk add apache2
+
+COPY ./webpage/ /var/www/html
+
+EXPOSE 80
+
+CMD ["apache2ctl","-D","FOREGROUND"]
