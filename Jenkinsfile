@@ -43,6 +43,11 @@ spec:
                
         }
       }
+     stage('Run Vulnerability Scan') {
+      steps {
+        sh 'grype naveenkumar003/myweb:${BUILD_NUMBER} --scope AllLayers'
+       }
+     }
      stage("Deployment") {
           steps {
              sshagent(credentials: ["github-ssh"]) {

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: naveen-webapp
+  name: myweb
 spec:
   selector:
     matchLabels:
@@ -12,6 +12,6 @@ spec:
         name: my-webapp
     spec:
       containers:
-        - name: my-web
+        - name: myweb
           image: naveenkumar003/my-webapp:v1
   replicas: 1
