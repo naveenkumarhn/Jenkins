@@ -36,7 +36,7 @@ spec:
                      sh '''
                      /kaniko/executor --dockerfile `pwd`/Dockerfile \
                                       --context `pwd` \
-                                      --destination=naveenkumar003/myweb
+                                      --destination=naveenkumar003/myweb:${BUILD_NUMBER}
                         '''
                   }
                }
