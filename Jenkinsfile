@@ -51,8 +51,7 @@ spec:
       }
      stage("Deployment") {
           steps {
-             sshagent(credentials: ["github-ssh"]) {
-                git branch: 'main',credentialsId: 'github-ssh', url: 'git@github.com:naveenkumarhn/Jenkins.git'
+                git branch: 'main', url: 'https://github.com/naveenkumarhn/Jenkins.git'
                 
                sh '''
                   git config --global user.email "nkumar1805@yahoo.in"
@@ -62,7 +61,6 @@ spec:
                   ls
                   git push --force origin master
                  '''
-        } 
           }
        }
      }
