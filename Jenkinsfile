@@ -60,7 +60,7 @@ spec:
                   git add .
                   git commit -am "${BUILD_NUMBER}"
                   ls
-                  git push --force origin master
+                  git push --force origin main
                  '''
           }
        }
