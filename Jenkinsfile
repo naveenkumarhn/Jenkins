@@ -45,7 +45,7 @@ spec:
       }
       stage('Analyze with Anchore plugin') {
          steps {
-            writeFile file: 'anchore_images', text: 'docker.io/naveenkumar003/myweb:8'
+            writeFile file: 'anchore_images', text: 'docker.io/naveenkumar003/myweb:4'
             anchore name: 'anchore_images'
          }
       }
