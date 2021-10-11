@@ -51,7 +51,7 @@ spec:
       }
      stage("Deployment") {
           steps {
-                git branch: 'main', url: 'https://github.com/naveenkumarhn/Jenkins.git'
+                git branch: 'main', url: 'https://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@github.com/naveenkumarhn/Jenkins.git'
                 
                sh '''
                   git config --global user.email "nkumar1805@yahoo.in"
