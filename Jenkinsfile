@@ -49,20 +49,5 @@ spec:
             anchore name: 'anchore_images'
          }
       }
-     stage("Deployment") {
-          steps {
-                git branch: 'main', url: 'https://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@github.com/naveenkumarhn/Jenkins.git'
-                
-               sh '''
-                  git config --global user.email "nkumar1805@yahoo.in"
-                  git config --global user.name naveenkumarhn
-                  sed -i "s/myweb:.*/myweb:${BUILD_NUMBER}/g" deploy/deploy.yaml
-                  git add .
-                  git commit -am "${BUILD_NUMBER}"
-                  ls
-                  git push --force origin main
-                 '''
-          }
-       }
      }
 }
